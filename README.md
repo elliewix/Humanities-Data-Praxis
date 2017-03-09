@@ -21,4 +21,4 @@ Rough agenda and corresponding data files:
 # Acknowledgments
 * Spreadsheet and tidy data activity modified from: http://www.datacarpentry.org/spreadsheet-ecology-lesson/
 * OpenRefine tutorial modified from a lesson prepared by/with Megan Senseney, Trevor Muñoz and Lydia Zvyaginsteva, at the Maryland Institute for Technology in the Humanities and developed through the Digital Humanities Data Curation Institute series, generously funded by the National Endowment of the Humanities.  
-* Andrea stole a few slides from a talk she gave with Allen Renear. Thanks Allen! 
+* Andrea stole ~~a few~~ ok almost all of her intro slides from a talk she gave with Allen Renear. Thanks Allen! 
