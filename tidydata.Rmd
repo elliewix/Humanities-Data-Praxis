@@ -1,5 +1,5 @@
 ---
-title: 'Basic graphics with tidy data, or: why starting tidy makes life in R palatable'
+title: 'Working with tidy data in R, or: why starting tidy makes life in R palatable'
 author: "Elizabeth Wickes, wickes1@illinois.edu, @elliewix"
 output:
   pdf_document:
@@ -10,49 +10,58 @@ output:
     fig_width: 6
 ---
 
-## Spreadsheet activity
+# Getting started with data in R
 
-Handout for the "Creating Tidy Data" workshop of the 2016 Midwest Data Librarian Symposium (MDLS). 
-GitHub Repository: https://github.com/elliewix/but-i-just-want-to-make-a-graph
+As part of the workshop we'll be talking about R and doing a brief tour or RStudio.  This handout is meant to capture the commands that were used and give you something to experiment with after the workshop.  Starting out with tidy or tidyish data will allow you to (nearly...) immediately use data exploration tools.
 
-Open up the Excel file included within the GitHub repository.  Take a few moments to explore it, the data included, structure, etc.  Now, try to think about how you could reorganize it into a single data file.  Work with 1-2 people sitting next to you.  Determine what the new headers should be and write them down below.
+## Load the data
 
-&nbsp;
+RStudio includes several tools to help you import data into your environment.  You can find this on the upper right, in the "Environment" tab.  Click "Import Dataset" and select the appropriate file type.  You can use CSV for delimited plain text files, even if they aren't proper CSVs.
 
-&nbsp;
+Select the file you'd like to import, and you'll be presented with a wizard to help you preview your data import options.  You can play around with these options and view the changes in the preview box.  All the defaults should work just fine with our example data file.  Note that it is autofilling blank values with `NA` and does a decent job at detecting when a column is numerical/integer versus character.  The wizard will have a box that is generating the import code as you make changes in the tool.  You can click import or you can copy the text in.
 
-&nbsp;
+```{r, warning=FALSE, error=FALSE}
+library(readr)
 
-Create a new tab and begin recreating the new data file if you have time remaining.
+cleanedsurvey <- read_csv("~/Documents/Humanities-Data-Praxis/cleanedsurvey.csv")
 
-## R graphing activity
+View(cleanedsurvey)
+```
 
-You should follow along in RStudio with these commands. You will be using a data file called `cleanedsurvey.csv` located within the GitHub repository.
+## Instead of a Pivot Table...
+
+R has several commands for quickly putting together summary tables of your data.  `xtabs()` will create a contingency table that sums either values or instances in categories.  You will be using the `~` symbol to provide a formula.  Items on the left will be summed and items on the right will be the groups.  Use the `+` symbol to add more than one group.
+
+```{r, warning=FALSE}
+
+xtabs(~ Sex, data = cleanedsurvey) # count of how many male and female samples
+xtabs(~ Sex + Species, data = cleanedsurvey) # count of how many male/female samples there are per species
+```
+
+Say you need more than just tabulations of values, but you want to do some basic summary statistics as a method of exploration.  You can use `summary()` over a single column, but we often care about how that value interacts with other factors.  `aggregate()` is the tool for you.  This uses a similar notation system, with the column you want to do the math stuff on the left of the `~` and the columns with the categories on right right, with additional columns connected via `+`.
+
+```{r, warning=FALSE}
+
+aggregate(Weight ~ Sex, data = cleanedsurvey, FUN = mean) # mean weight by sex
+aggregate(Weight ~ Sex + Year, data = cleanedsurvey, FUN = mean) # mean weight by sex and species
+
+```
+
+# Graphics in R
+
+`ggplot2` is a solid community standard in creating visualizations within R.  We're going to step through some examples of how to use tidy data with `ggplot2`.
 
 ### Load the library
 
-You should have installed this with `install.packages("ggplot2")`.  You call `library()` with the module name, without quotes, to load the library.
+You will first need to install the ggplot2 graphics package.  Please use the `install.packages("ggplot2")` command to do so, and will only need to do this once.  After it installs, you call `library()` with the module name, without quotes, to load the library.
 
 ```{r, warning=FALSE}
 library(ggplot2)
 ```
 
-
-### Load the data
-
-Use Tools -> Import Dataset -> From text file...
-
-Select the files, and accept all the default options in the wizard.  You can play around with these options and view the changes in the preview box.
-
-```{r, warning=FALSE, error=FALSE}
-cleanedsurvey <- read.csv("cleanedsurvey.csv")
-```
-
-This creates an object in memory, called `cleanedsurvey`, that represents the data.frame containing the data.
-
 ### Make a basic histogram
 
-This will be using ggplot2 to create a histogram.  They usually start with a `ggplot()` statement that declares where the data frame is, then you use `+` to add graphic elements to the plot. You can layer these elements as desired.
+This will be using ggplot2 to create a histogram.  ggplot statements usually start with a `ggplot()` function with some basic declarations, then you use `+` to add graphic elements to the plot. You can layer these elements as desired.
 
 You can see in the code below that we are declaring `data = cleanedsurvey` in `ggplot()`, but not selecting any of the data columns yet.  Just providing the data frame.
 
