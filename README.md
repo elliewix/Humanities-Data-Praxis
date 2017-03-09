@@ -15,3 +15,5 @@ Rough agenda and corresponding data files:
   * Then you'll be using cleanedsurvey.csv for our Pivot Table demo
 * Open Refine demo
 * Tour of R
+    * This will use the cleanedsurvey.csv data file for examples
+    * We will be referencing the tidydata.pdf handout (which is generated from tidydata.rmd)
